@@ -1,15 +1,20 @@
 import React from "react";
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 // буду использовать шорт ид , иногда в пиксабай попадаются картинки с одинаковыми ид
+
 const shortid = require("shortid");
 
-const ImageGalleryItem = ({ items }) => (
+const ImageGalleryItem = ({ items, onClick }) => (
   <>
     {items.map((item) => (
-      <li key={shortid.generate()} className="ImageGalleryItem">
+      <li
+        data-src={item.largeImageURL}
+        key={shortid.generate()}
+        className="ImageGalleryItem"
+        onClick={onClick}
+      >
         <img
           src={item.webformatURL}
-          data-sourse={item.largeImageURL}
           alt={item.tags}
           className="ImageGalleryItem-image"
         ></img>
@@ -19,3 +24,14 @@ const ImageGalleryItem = ({ items }) => (
 );
 
 export default ImageGalleryItem;
+
+ImageGalleryItem.propTypes = {
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      largeImageURL: PropTypes.string.isRequired,
+      webformatURL: PropTypes.string.isRequired,
+      tags: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  onClick: PropTypes.func.isRequired,
+};

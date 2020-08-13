@@ -3,9 +3,7 @@ import Searchbar from "./Components/Searchbar/Searchbar";
 import ImageGallery from "./Components/ImageGallery/ImageGallery";
 import Button from "./Components/Button/Button";
 import Loader from "./Components/Loader/Loader";
-
 import axios from "axios";
-const apiKey = "16732818-7da563d5e6a89fd9c9e651ff7";
 
 export default class App extends Component {
   state = {
@@ -16,6 +14,7 @@ export default class App extends Component {
   };
 
   handleMakeRequest = () => {
+    const apiKey = "16732818-7da563d5e6a89fd9c9e651ff7";
     const { inputValue, page } = this.state;
     this.setState({ isLoading: true });
 
@@ -24,7 +23,6 @@ export default class App extends Component {
         `https://pixabay.com/api/?q=${inputValue}&page=${page}&key=${apiKey}&image_type=photo&orientation=horizontal&per_page=12`
       )
       .then((response) => {
-        console.log(response);
         this.setState(({ imgList }) => ({
           imgList: [...imgList, ...response.data.hits],
           isLoading: false,
@@ -62,7 +60,7 @@ export default class App extends Component {
       this.handleMakeRequest();
     }
 
-    if (prevState.isLoading === true && !isLoading) {
+    if (prevState.isLoading && !isLoading) {
       window.scrollTo({
         top: document.documentElement.scrollHeight,
         behavior: "smooth",
@@ -85,7 +83,7 @@ export default class App extends Component {
         {isLoading ? (
           <Loader />
         ) : (
-          imgList.length !== 0 && <Button onClick={this.loadMore} />
+          imgList.length > 0 && <Button onClick={this.loadMore} />
         )}
       </div>
     );

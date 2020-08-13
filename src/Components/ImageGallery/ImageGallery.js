@@ -1,22 +1,37 @@
-import React from "react";
+import React, { Component } from "react";
 import ImageGalleryItem from "../ImageGalleryItem/ImageGalleryItem";
+import Modal from "../Modal/Modal";
 // import PropTypes from "prop-types";
-// import styles from "./contactlist.module.css";
 
-const ImageGallery = ({ items }) => (
-  <ul className="ImageGallery">
-    <ImageGalleryItem items={items} data-sourse={items.largeImageURL} />
-  </ul>
-);
+export default class ImageGallery extends Component {
+  state = {
+    isModal: false,
+    imgSrc: "",
+  };
 
-export default ImageGallery;
+  openModal = (e) => {
+    const largeImageURL = e.currentTarget.dataset.src;
+    this.setState({ imgSrc: largeImageURL, isModal: true });
+  };
 
-// ImageGallery.propTypes = {
-//   data: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       id: PropTypes.string.isRequired,
-//       name: PropTypes.string.isRequired,
-//       number: PropTypes.string.isRequired,
-//     })
-//   ).isRequired,
-// };
+  closeModal = (e) => {
+    if (e.currentTarget === e.target) {
+      this.setState({ isModal: false });
+    }
+  };
+
+  render() {
+    const { isModal, imgSrc } = this.state;
+    const { items } = this.props;
+    return (
+      <>
+        <ul className="ImageGallery">
+          <ImageGalleryItem items={items} onClick={this.openModal} />
+        </ul>
+        {isModal && (
+          <Modal src={imgSrc} alt={items.tags} onClick={this.closeModal} />
+        )}
+      </>
+    );
+  }
+}
