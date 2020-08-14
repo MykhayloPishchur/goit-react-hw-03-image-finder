@@ -3,7 +3,7 @@ import Searchbar from "./Components/Searchbar/Searchbar";
 import ImageGallery from "./Components/ImageGallery/ImageGallery";
 import Button from "./Components/Button/Button";
 import Loader from "./Components/Loader/Loader";
-import axios from "axios";
+import api from "../src/Services/Services";
 
 export default class App extends Component {
   state = {
@@ -14,14 +14,10 @@ export default class App extends Component {
   };
 
   handleMakeRequest = () => {
-    const apiKey = "16732818-7da563d5e6a89fd9c9e651ff7";
     const { inputValue, page } = this.state;
     this.setState({ isLoading: true });
 
-    axios
-      .get(
-        `https://pixabay.com/api/?q=${inputValue}&page=${page}&key=${apiKey}&image_type=photo&orientation=horizontal&per_page=12`
-      )
+    api(inputValue, page)
       .then((response) => {
         this.setState(({ imgList }) => ({
           imgList: [...imgList, ...response.data.hits],
